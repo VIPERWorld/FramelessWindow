@@ -1,17 +1,23 @@
-#include <QtWidgets>
+#include <QPainter>
+#include <QAbstractAnimation>
+#include <QPropertyAnimation>
+#include <QFontDatabase>
+#include <QGridLayout>
 
 #include "switcher.h"
 
 
 Circle::Circle(QWidget* t_parent)
     : QFrame(t_parent),
-    m_switcherColor(QColor(255, 255, 255))
+    m_switcherColor(Qt::white)
 {
 }
 
 
 void Circle::paintEvent(QPaintEvent* t_event)
 {
+    Q_UNUSED(t_event);
+
     QPainter painter(this);
 
     painter.setRenderHint(QPainter::Antialiasing);
@@ -27,18 +33,11 @@ void Circle::paintEvent(QPaintEvent* t_event)
 }
 
 
-void Circle::resizeEvent(QResizeEvent* t_event)
-{
-
-
-}
-
-
 void Circle::animate()
 {
     auto switcherAnimation = new QPropertyAnimation(this, "pos");
     connect(switcherAnimation, &QPropertyAnimation::finished, this, &Circle::onChangeFrame);
-    switcherAnimation->setDuration(400);
+    switcherAnimation->setDuration(350);
     switcherAnimation->setEasingCurve(QEasingCurve::Linear);
 
     QPoint startPos{ 0, 0 };
@@ -72,7 +71,6 @@ void Circle::onChangeFrame()
 Switcher::Switcher(QWidget* t_parent)
     : QAbstractButton(t_parent),
     m_mainLayout(new QGridLayout),
-    m_switcherColor(QColor(255, 255, 255)),
     m_switchedOnColor(QColor(146, 220, 92)),
     m_switchedOffColor(QColor(230, 222, 211)),
     m_circleSwitcher(new Circle(this))
@@ -97,12 +95,14 @@ Switcher::Switcher(QWidget* t_parent)
 
 
     connect(this, &QAbstractButton::toggled, m_circleSwitcher, &Circle::onToggled);
-    connect(m_circleSwitcher, &Circle::toggled, this, &Switcher::changeFrame);
+    connect(m_circleSwitcher, &Circle::toggled, this, &Switcher::toggled);
 }
 
 
 void Switcher::resizeEvent(QResizeEvent* t_event)
 {
+    Q_UNUSED(t_event);
+
     auto containerWidth = geometry().width();
     auto containerHeight = geometry().height();
 
@@ -119,6 +119,7 @@ void Switcher::resizeEvent(QResizeEvent* t_event)
 
 void Switcher::paintEvent(QPaintEvent* t_event)
 {
+    Q_UNUSED(t_event);
 
     QPainter painter(this);
 
@@ -146,7 +147,7 @@ void Switcher::paintEvent(QPaintEvent* t_event)
     painter.setPen(Qt::white);
     m_textFont = QFont(m_fontFamily, 16);
     painter.setFont(m_textFont);
-    painter.drawText(onTextRect, Qt::AlignCenter, "ON");
-    painter.drawText(offTextRect, Qt::AlignCenter, "OFF");
+    painter.drawText(onTextRect, Qt::AlignCenter, tr("ON"));
+    painter.drawText(offTextRect, Qt::AlignCenter, tr("OFF"));
 }
 

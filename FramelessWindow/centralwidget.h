@@ -19,8 +19,6 @@ public:
 signals:
     void changeFrame(bool t_switchedOn);
 
-protected:
-
 private:
     void styleCaptionLabel();
 
@@ -30,3 +28,4 @@ private:
     QString m_fontFamily;
 
 };
+

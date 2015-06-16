@@ -1,9 +1,12 @@
-#include "transparentwindow.h"
-#include <QtWidgets/QApplication>
+#include <QApplication>
+
+#include "controller.h"
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    TransparentWindow w;
+    Controller c;
     return a.exec();
 }
+

@@ -30,7 +30,6 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent* t_event) override;
-    void resizeEvent(QResizeEvent* t_event) override;
 
 private:
     QColor m_switcherColor;
@@ -66,7 +65,7 @@ public:
     explicit Switcher(QWidget* t_parent = nullptr);
 
 signals:
-    void changeFrame(bool t_swithedOn);
+    void toggled(bool t_swithedOn);
 
 protected:
     virtual void resizeEvent(QResizeEvent* t_event) override;
@@ -75,7 +74,6 @@ protected:
 private:
     QGridLayout* m_mainLayout;
 
-    QColor m_switcherColor;
     QColor m_switchedOnColor;
     QColor m_switchedOffColor;
     QColor m_backgroundColor;

@@ -19,10 +19,7 @@ CentralWidget::CentralWidget(QWidget* t_parent)
     setContentsMargins(0, 0, 0, 0);
     layout()->setContentsMargins(0, 0, 0, 0);
 
-    connect(static_cast<Switcher*>(m_switcher), &Switcher::changeFrame, this, &CentralWidget::changeFrame);
-
-    auto vSpacerTop = new QSpacerItem(0, 109, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    auto vSpacerCenter = new QSpacerItem(0, 76, QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(m_switcher, &Switcher::toggled, this, &CentralWidget::changeFrame);
 
     m_mainLayout->addSpacing(109);
     m_mainLayout->addWidget(m_switcher, 1, Qt::AlignCenter);

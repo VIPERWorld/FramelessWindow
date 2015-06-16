@@ -1,25 +1,26 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 class QGridLayout;
-class QSize;
 QT_END_NAMESPACE
 
-class Switcher;
-class CentralWidget;
 
 class IMainWindow : public QMainWindow
 {
 public:
-    IMainWindow(const QSize &t_size, QWidget* t_parent = nullptr);
+    const static QSize DEFAULT_WINDOW_SIZE;
+    const static QColor DEFAULT_BACKGROUND_COLOR;
 
-    virtual void setMainWidget(QWidget* t_switcher);
+    explicit IMainWindow(QWidget* t_parent = nullptr);
 
     virtual ~IMainWindow()
     {
     }
+
+    virtual void setMainWidget(QWidget* t_switcher);
+
 
 protected:
     QWidget* m_centralWidget;
