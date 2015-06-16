@@ -1,0 +1,12 @@
+<RCC>
+<qresource prefix="/images">
+    <file>Resources/images/close.png</file>
+    <file>Resources/images/custom_icon.png</file>
+    <file>Resources/images/maximize.png</file>
+    <file>Resources/images/minimize.png</file>
+    <file>Resources/images/restore.png</file>
+</qresource>
+<qresource prefix="/fonts">
+    <file>Resources/fonts/AlternateGotNo3D.ttf</file>
+</qresource>
+</RCC>
