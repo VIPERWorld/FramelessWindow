@@ -3,9 +3,10 @@
 #include <QObject>
 #include <QSize>
 #include <QPoint>
+#include <QRect>
 
 
-class IMainWindow;
+class AbstractMainWindow;
 class CentralWidget;
 class DefaultWindow;
 class FramelessWindow;
@@ -19,16 +20,14 @@ public:
 
     Controller(QObject* t_parent = nullptr);
 
-private:
-    void toogleFrameStyle(bool t_defaultStyle);
 
-    IMainWindow* m_activeWindow;
+private:
+    void toogleFrame(bool t_framelesStyle);
+
+    AbstractMainWindow* m_activeWindow;
+    AbstractMainWindow* m_defaultWindow;
+    AbstractMainWindow* m_framelessWindow;
     CentralWidget* m_centralWidget;
-    DefaultWindow* m_defaultWindow;
-    FramelessWindow* m_framelessWindow;
-    QSize m_frameTitleSize;
-    bool m_framelessStyle = false;
-    QPoint m_lastPos;
 
 };
 

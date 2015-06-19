@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QMenuBar>
 
 #include "controller.h"
@@ -9,51 +8,43 @@
 
 Controller::Controller(QObject* t_parent)
     : QObject(t_parent),
-    m_centralWidget(new CentralWidget),
     m_defaultWindow(new DefaultWindow),
-    m_framelessWindow(new FramelessWindow)
+    m_framelessWindow(new FramelessWindow),
+    m_centralWidget(new CentralWidget)
 {
-    connect(m_centralWidget, &CentralWidget::changeFrame, this, &Controller::toogleFrameStyle);
+    connect(m_centralWidget, &CentralWidget::changeFrame, this, &Controller::toogleFrame);
 
-    connect(m_defaultWindow, &DefaultWindow::frameSizeDetected,
-        m_framelessWindow, &FramelessWindow::onFrameSizeDetected);
+
+    connect(static_cast<DefaultWindow*>(m_defaultWindow), &DefaultWindow::frameSizeDetected,
+        static_cast<FramelessWindow*>(m_framelessWindow), &FramelessWindow::onFrameSizeDetected);
 
     m_activeWindow = m_defaultWindow;
+    connect(m_activeWindow, &AbstractMainWindow::enableSwitcherSignal, m_centralWidget, &CentralWidget::enableSwitcher);
     m_activeWindow->setMainWidget(m_centralWidget);
-    m_activeWindow->show();
+    m_activeWindow->showNormal();
 
-    m_frameTitleSize = { m_defaultWindow->frameGeometry().width() - m_defaultWindow->width(),
-        m_defaultWindow->frameGeometry().height() - m_defaultWindow->height() };
 }
 
 
-void Controller::toogleFrameStyle(bool t_framelessStyle)
+void Controller::toogleFrame(bool t_framelessWindow)
 {
-    auto isMaximized = m_activeWindow->isMaximized();
-    auto width = m_activeWindow->frameGeometry().width();
-    auto height = m_activeWindow->frameGeometry().height();
+    auto maximized = m_activeWindow->isMaximized();
+    auto normalGeometry = m_activeWindow->getNormalGeometry();
 
-    if (!isMaximized)
-        m_lastPos = m_activeWindow->pos();
+    m_activeWindow->hide();
 
+    m_activeWindow = t_framelessWindow ? m_framelessWindow : m_defaultWindow;
+    connect(m_activeWindow, &AbstractMainWindow::enableSwitcherSignal, m_centralWidget, &CentralWidget::enableSwitcher);
+        
+    if (!maximized)
+        m_activeWindow->setGeometry(normalGeometry);
 
-    if (t_framelessStyle) {
-        m_activeWindow->hide();
-        m_activeWindow = m_framelessWindow;
-    } else {
-        width = m_activeWindow->width() - m_frameTitleSize.width();
-        height = m_activeWindow->height() - m_frameTitleSize.height();
-        m_activeWindow->hide();
-        m_activeWindow = m_defaultWindow;
-    }
     m_activeWindow->setMainWidget(m_centralWidget);
 
-    if (isMaximized) {
+    if (!maximized)
+        m_activeWindow->showNormal();
+    else
         m_activeWindow->showMaximized();
-    } else {
-        m_activeWindow->resize(width, height);
-        m_activeWindow->move(m_lastPos);
-        m_activeWindow->show();
-    }
+
 }
 

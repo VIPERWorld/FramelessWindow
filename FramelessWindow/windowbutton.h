@@ -17,7 +17,7 @@ public:
     WindowButton(Type t_type, QWidget* t_parent = nullptr);
 
 public slots:
-    void onWindowMaximized(bool t_maximize);
+    void setMaximized(bool t_maximized);
 
 protected:
     void resizeEvent(QResizeEvent* t_event) override;
@@ -28,6 +28,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent* t_event) override;
 
 private:
+    void initButton(const QPixmap& t_icon) const;
+    void initIcon(const QPixmap& t_icon);
+    void initPixmaps();
+    void initPixmap(QPixmap** t_pixmap) const;
+
     enum class State { Normal, Hovered, Clicked };
 
     Type m_type;
@@ -35,12 +40,8 @@ private:
     QPixmap* m_normal = nullptr;
     QPixmap* m_hovered = nullptr;
     QPixmap* m_clicked = nullptr;
-    bool m_maximized = false;
 
-    void initButton(const QPixmap& t_icon) const;
-    void initIcon(const QPixmap& t_icon);
-    void initPixmaps();
-    void initPixmap(QPixmap** t_pixmap) const;
+    bool m_maximized = false;
 
 };
 

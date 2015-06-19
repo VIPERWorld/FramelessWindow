@@ -11,12 +11,12 @@ WindowButton::WindowButton(Type t_type, QWidget* t_parent)
 }
 
 
-void WindowButton::onWindowMaximized(bool t_maximized)
+void WindowButton::setMaximized(bool t_maximized)
 {
-    if (m_type != Type::Maximize)
-        return;
-    m_maximized = t_maximized;
-    initPixmaps();
+    if (m_type == Type::Maximize && m_maximized != t_maximized) {
+        m_maximized = t_maximized;
+        initPixmaps();
+    }
 }
 
 
@@ -35,8 +35,7 @@ void WindowButton::paintEvent(QPaintEvent* t_event)
     QPainter painter(this);
 
     if(isEnabled()) {
-        switch(m_state)
-        {
+        switch(m_state) {
         case State::Normal:
             if(m_normal)
                 painter.drawPixmap(0, 0, *m_normal );

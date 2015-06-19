@@ -1,16 +1,16 @@
 #include <QPushButton>
-#include <QFontDatabase>
 #include <QLabel>
 #include <QVBoxLayout>
 
 #include "centralwidget.h"
 #include "switcher.h"
+#include "utils.h"
 
 
 CentralWidget::CentralWidget(QWidget* t_parent)
     : QWidget(t_parent),
-    m_mainLayout(new QVBoxLayout),
-    m_switcher(new Switcher),
+    m_mainLayout(new QVBoxLayout(this)),
+    m_switcher(new Switcher(this)),
     m_captionLabel(new QLabel(tr("Use slider to switch window states").toUpper()))
 {
     styleCaptionLabel();
@@ -28,15 +28,18 @@ CentralWidget::CentralWidget(QWidget* t_parent)
 }
 
 
+void CentralWidget::enableSwitcher(bool t_enable)
+{
+    m_switcher->setEnabled(t_enable);
+}
+
+
 void CentralWidget::styleCaptionLabel()
 {
-    auto fontId = QFontDatabase::addApplicationFont(":/fonts/Resources/fonts/AlternateGotNo3D.ttf");
-    auto loadedFontFamilies = QFontDatabase::applicationFontFamilies(fontId);
-    auto m_fontFamily = loadedFontFamilies.first();
-
-    m_captionLabel->setFont(QFont(m_fontFamily, 11));
+    m_captionLabel->setFont(Utils::instance().font(11));
     auto palette = m_captionLabel->palette();
     palette.setColor(m_captionLabel->foregroundRole(), QColor(204, 204, 204));
     m_captionLabel->setPalette(palette);
 }
+
 
